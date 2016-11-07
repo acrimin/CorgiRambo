@@ -1,0 +1,81 @@
+<?xml version = "1.0"?>
+<GameData>
+<!-- screenTitle is also used to identify you and your animation. 
+     So make sure to include your name as part of the screenTitle -->
+<screenTitle>Drew Criminski's Awesome Animation</screenTitle>
+<maxStringSize>50</maxStringSize>
+
+<frameCap>60</frameCap>
+<framesAreCapped>true</framesAreCapped>
+
+<frameMax>400</frameMax>
+<username>acrimin</username>
+
+<view>
+  <width>854</width>
+  <height>480</height>
+</view>
+
+<world>
+  <width>5000</width>
+  <height>1000</height>
+  <gravity>880</gravity>
+</world>
+
+<back>
+  <file>images/cloudBackgroundtall.bmp</file>
+  <red>0</red>
+  <green>0</green>
+  <blue>0</blue>
+  <factor>4</factor>
+  <transparency>false</transparency>
+</back>
+
+<mountains>
+  <file>images/mountainstall.bmp</file>
+  <red>0</red>
+  <green>0</green>
+  <blue>0</blue>
+  <factor>2</factor>
+  <transparency>true</transparency>
+</mountains>
+
+<drive>
+  <file>images/drivetall.bmp</file>
+  <red>0</red>
+  <green>0</green>
+  <blue>0</blue>
+  <factor>1</factor>
+  <transparency>true</transparency>
+</drive>
+
+<font name="font">
+  <file>font/dyslexic-bold.otf</file>
+  <size>16</size>
+  <red>255</red>
+  <green>0</green>
+  <blue>0</blue>
+  <unused>0</unused>
+</font>
+
+<corgi>
+  <file>images/corgis.bmp</file>
+  <startLoc x="120" y="820"/>
+  <frames>12</frames>
+  <frameInterval>100</frameInterval>
+  <speedX>200</speedX>
+  <speedY>-350</speedY>
+  <traction>580</traction>
+  <transparency>true</transparency>
+</corgi>
+
+<birds>
+  <file>images/birds.bmp</file>
+  <frames>30</frames>
+  <frameInterval>100</frameInterval>
+  <speed>300</speed>
+  <scale>.25</scale>
+  <count>40</count>
+  <transparency>true</transparency>
+</birds>
+</GameData>
