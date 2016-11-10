@@ -59,7 +59,7 @@
 </font>
 
 <corgi>
-  <file>images/corgis.bmp</file>
+  <file>images/corgisAK.bmp</file>
   <startLoc x="120" y="820"/>
   <frames>12</frames>
   <frameInterval>100</frameInterval>
