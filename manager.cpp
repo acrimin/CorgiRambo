@@ -60,7 +60,8 @@ Manager::Manager() :
     world.push_back(new World("back", Gamedata::getInstance().getXmlInt("back/factor")));
     world.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor")));
     world.push_back(new World("drive", Gamedata::getInstance().getXmlInt("drive/factor")));
-    sprites.push_back( new Player("corgi") );
+    Gun* playerGun = new Gun();
+    sprites.push_back( new Player("corgi", playerGun) );
     player = (Player*) sprites[0];
     
     for (int i = 0; i < Gamedata::getInstance().getXmlInt("birds/count"); i++) {
@@ -197,6 +198,9 @@ void Manager::play() {
                 if (keystate[SDLK_LSHIFT]) {
                     player->shift(true);
                 }
+                if (keystate[SDLK_SPACE]) {
+                    player->shoot(true);
+                }
 
             }
             if (event.type == SDL_KEYUP) {
@@ -208,6 +212,9 @@ void Manager::play() {
                 }
                 if (event.key.keysym.sym == SDLK_LSHIFT) {
                     player->shift(false);
+                }
+                if (event.key.keysym.sym == SDLK_SPACE) {
+                    player->shoot(false);
                 }
             }
 

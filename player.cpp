@@ -1,6 +1,7 @@
 #include "player.h"
 #include "gamedata.h"
 #include "frameFactory.h"
+#include "gun.h"
 #include <cmath>
 
 void Player::advanceFrame(Uint32 ticks) {
@@ -11,7 +12,7 @@ void Player::advanceFrame(Uint32 ticks) {
     }
 }
 
-Player::Player( const std::string& name) :
+Player::Player( const std::string& name, Gun* startGun) :
     Drawable(name,
              Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
                       Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
@@ -37,7 +38,8 @@ Player::Player( const std::string& name) :
     jumpFrame(0),
     standFrame(4),
     speedMultiplier(1),
-    frameMultiplier(1)
+    frameMultiplier(1),
+    gun(startGun)
 { 
 }
 
@@ -62,7 +64,8 @@ Player::Player(const Player& s) :
     jumpFrame(s.jumpFrame),
     standFrame(s.standFrame),
     speedMultiplier(s.speedMultiplier),
-    frameMultiplier(s.frameMultiplier)
+    frameMultiplier(s.frameMultiplier),
+    gun(s.gun)
 { }
 
 void Player::draw() const {
@@ -142,3 +145,7 @@ void Player::shift(bool down) {
     } 
 }
 
+void Player::shoot(bool down) {
+    std::cout << down << std::endl;
+    gun->shoot(X(), Y());
+}

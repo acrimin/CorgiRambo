@@ -78,7 +78,7 @@ void ScaledTwoWaySprite::update(Uint32 ticks) {
     if ( Y() < 0) {
         velocityY( abs( velocityY() ) );
     }
-    if ( Y() > worldHeight-frameHeight) {
+    if ( Y() > worldHeight-frameHeight-125) {
         velocityY( -abs( velocityY() ) );
     }
 

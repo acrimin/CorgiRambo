@@ -3,10 +3,11 @@
 #include <string>
 #include <vector>
 #include "drawable.h"
+#include "gun.h"
 
 class Player : public Drawable {
 public:
-    Player(const std::string&);
+    Player(const std::string&, Gun*);
     Player(const Player&);
     virtual ~Player() { }
 
@@ -18,9 +19,11 @@ public:
     void right(bool);
     void left(bool);
     void shift(bool);
+    void shoot(bool);
     void up();
 
 protected:
+    Player operator=(const Player&);
     const std::vector<Frame *> frames;
     int worldWidth;
     int worldHeight;
@@ -49,6 +52,8 @@ protected:
 
     float speedMultiplier;
     float frameMultiplier;
+
+    Gun* gun;
 };
 
 #endif

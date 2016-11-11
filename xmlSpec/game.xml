@@ -70,9 +70,9 @@
 </corgi>
 
 <birds>
-  <file>images/birds.bmp</file>
-  <frames>30</frames>
-  <frameInterval>100</frameInterval>
+  <file>images/birds2.bmp</file>
+  <frames>16</frames>
+  <frameInterval>80</frameInterval>
   <speed>300</speed>
   <scale>.25</scale>
   <count>40</count>
