@@ -41,6 +41,7 @@ Manager::Manager() :
     viewport( Viewport::getInstance() ),
     sprites(),
     paintedSprites(),
+    guns(),
     player(),
     currentSprite(0),
 
@@ -60,8 +61,8 @@ Manager::Manager() :
     world.push_back(new World("back", Gamedata::getInstance().getXmlInt("back/factor")));
     world.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor")));
     world.push_back(new World("drive", Gamedata::getInstance().getXmlInt("drive/factor")));
-    Gun* playerGun = new Gun();
-    sprites.push_back( new Player("corgi", playerGun) );
+    guns.push_back( new Gun("Bazooka") );
+    sprites.push_back( new Player("corgi", guns[0]) );
     player = (Player*) sprites[0];
     
     for (int i = 0; i < Gamedata::getInstance().getXmlInt("birds/count"); i++) {
@@ -83,7 +84,6 @@ void Manager::draw() const {
     for (unsigned i = 0; i < sprites.size(); ++i) {
         sprites[i]->draw();
     }
-
 
     if (hud) {
         io.drawHud();

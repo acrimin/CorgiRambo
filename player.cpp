@@ -17,7 +17,7 @@ Player::Player( const std::string& name, Gun* startGun) :
              Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
                       Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
              Vector2f(0, 0)),
-    frames( FrameFactory::getInstance().getFrames(name) ),
+    frames( FrameFactory::getInstance().getFrames(name + "/" + startGun->getName()) ),
     worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
     worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
 
@@ -72,6 +72,8 @@ void Player::draw() const {
     Uint32 x = static_cast<Uint32>(X());
     Uint32 y = static_cast<Uint32>(Y());
     frames[currentFrame + face]->draw(x, y);
+
+    gun->draw();
 }
 
 void Player::update(Uint32 ticks) {
@@ -113,6 +115,7 @@ void Player::update(Uint32 ticks) {
     Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
     setPosition(getPosition() + incr);
 
+    gun->update(ticks);
 }
 
 void Player::left(bool down) {
@@ -146,6 +149,6 @@ void Player::shift(bool down) {
 }
 
 void Player::shoot(bool down) {
-    std::cout << down << std::endl;
-    gun->shoot(X(), Y());
+    if (down) // fire from back corner
+        gun->shoot(getPosition() + Vector2f(face ? frameWidth : 0, 0), face ? -1 : 1);
 }

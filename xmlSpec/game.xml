@@ -12,8 +12,8 @@
 <username>acrimin</username>
 
 <view>
-  <width>854</width>
-  <height>480</height>
+  <width>1280</width>
+  <height>720</height>
 </view>
 
 <world>
@@ -59,9 +59,13 @@
 </font>
 
 <corgi>
-  <file>images/corgisAK.bmp</file>
-  <startLoc x="120" y="820"/>
+  <file>images/corgis.bmp</file>
   <frames>12</frames>
+  <AK47><file>images/corgisAK.bmp</file></AK47>
+  <AK47><frames>12</frames></AK47>
+  <Bazooka><file>images/corgisBazooka.bmp</file></Bazooka>
+  <Bazooka><frames>12</frames></Bazooka>
+  <startLoc x="120" y="820"/>
   <frameInterval>100</frameInterval>
   <speedX>200</speedX>
   <speedY>-350</speedY>
@@ -75,7 +79,44 @@
   <frameInterval>80</frameInterval>
   <speed>300</speed>
   <scale>.25</scale>
-  <count>40</count>
+  <count>20</count>
   <transparency>true</transparency>
 </birds>
+
+<AK47>
+    <file>images/AK47.bmp</file>
+    <startLoc x="120" y="820"/>
+    <displacement x="143" y="46"/>
+    <distance>500</distance>
+    <speed>500</speed>
+    <fireRate>30</fireRate>
+    <reloadTime>10</reloadTime>
+    <clipSize>50</clipSize>
+    <transparency>true</transparency>
+</AK47>
+
+<AK47Bullet>
+    <file>images/bulletAK.bmp</file>
+    <frames>2</frames>
+    <transparency>true</transparency>
+</AK47Bullet>
+
+ <Bazooka>
+    <file>images/bazooka.bmp</file>
+    <startLoc x="120" y="820"/>
+    <displacement x="143" y="46"/>
+    <distance>500</distance>
+    <speed>500</speed>
+    <fireRate>30</fireRate>
+    <reloadTime>10</reloadTime>
+    <clipSize>50</clipSize>
+    <transparency>true</transparency>
+</Bazooka>
+
+<BazookaBullet>
+    <file>images/bulletBazooka.bmp</file>
+    <frames>2</frames>
+    <transparency>true</transparency>
+</BazookaBullet>
+    
 </GameData>

@@ -25,6 +25,7 @@ private:
 
     std::vector<Drawable*> sprites;
     std::vector<ScaledTwoWaySprite*> paintedSprites;
+    std::vector<Gun*> guns;
     Player* player;
     int currentSprite;
 
