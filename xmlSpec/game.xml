@@ -12,8 +12,8 @@
 <username>acrimin</username>
 
 <view>
-  <width>1280</width>
-  <height>720</height>
+  <width>853</width>
+  <height>480</height>
 </view>
 
 <world>
@@ -89,7 +89,7 @@
     <displacement x="143" y="46"/>
     <distance>500</distance>
     <speed>500</speed>
-    <fireRate>30</fireRate>
+    <fireRate>75</fireRate>
     <reloadTime>10</reloadTime>
     <clipSize>50</clipSize>
     <transparency>true</transparency>
@@ -107,7 +107,7 @@
     <displacement x="143" y="46"/>
     <distance>500</distance>
     <speed>500</speed>
-    <fireRate>30</fireRate>
+    <fireRate>1000</fireRate>
     <reloadTime>10</reloadTime>
     <clipSize>50</clipSize>
     <transparency>true</transparency>

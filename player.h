@@ -20,6 +20,7 @@ public:
     void left(bool);
     void shift(bool);
     void shoot(bool);
+    void changeGun(Gun* gun);
     void up();
 
 protected:
@@ -54,6 +55,7 @@ protected:
     float frameMultiplier;
 
     Gun* gun;
+    bool shooting;
 };
 
 #endif

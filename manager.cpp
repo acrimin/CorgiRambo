@@ -61,6 +61,8 @@ Manager::Manager() :
     world.push_back(new World("back", Gamedata::getInstance().getXmlInt("back/factor")));
     world.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor")));
     world.push_back(new World("drive", Gamedata::getInstance().getXmlInt("drive/factor")));
+
+    guns.push_back( new Gun("AK47") );
     guns.push_back( new Gun("Bazooka") );
     sprites.push_back( new Player("corgi", guns[0]) );
     player = (Player*) sprites[0];

@@ -39,7 +39,8 @@ Player::Player( const std::string& name, Gun* startGun) :
     standFrame(4),
     speedMultiplier(1),
     frameMultiplier(1),
-    gun(startGun)
+    gun(startGun),
+    shooting(false)
 { 
 }
 
@@ -65,7 +66,8 @@ Player::Player(const Player& s) :
     standFrame(s.standFrame),
     speedMultiplier(s.speedMultiplier),
     frameMultiplier(s.frameMultiplier),
-    gun(s.gun)
+    gun(s.gun),
+    shooting(s.shooting)
 { }
 
 void Player::draw() const {
@@ -115,6 +117,8 @@ void Player::update(Uint32 ticks) {
     Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
     setPosition(getPosition() + incr);
 
+    if (shooting) 
+        gun->shoot(getPosition() + Vector2f(face ? frameWidth : 0, 0), face ? -1 : 1);
     gun->update(ticks);
 }
 
@@ -139,6 +143,10 @@ void Player::up() {
         velocityY(maxYSpeed);
 }
 
+void Player::changeGun(Gun* gun) {
+    
+}
+
 void Player::shift(bool down) {
     speedMultiplier = 1;
     frameMultiplier = 1;
@@ -149,6 +157,5 @@ void Player::shift(bool down) {
 }
 
 void Player::shoot(bool down) {
-    if (down) // fire from back corner
-        gun->shoot(getPosition() + Vector2f(face ? frameWidth : 0, 0), face ? -1 : 1);
+    shooting = down;
 }

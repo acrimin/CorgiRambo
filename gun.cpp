@@ -1,18 +1,15 @@
 #include "gamedata.h"
 #include "frameFactory.h"
 #include "gun.h"
+#include "clock.h"
 
 Gun::Gun(const std::string& name) :
-    Drawable(name,
-         Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
-                  Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
-         Vector2f(0,0)
-        ),
-    frame(FrameFactory::getInstance().getFrame(name)),
+    name(name),
     bulletVelocity(Gamedata::getInstance().getXmlInt(name+"/speed"),0),
     displacement(Gamedata::getInstance().getXmlInt(name+"/displacement/x"),
                  Gamedata::getInstance().getXmlInt(name+"/displacement/y")), 
     bulletDistance(Gamedata::getInstance().getXmlInt(name+"/distance")),
+    fireRate(Gamedata::getInstance().getXmlInt(name+"/fireRate")), 
     canShoot(true),
     outBullets(),
     freeBullets()
@@ -41,10 +38,14 @@ void Gun::update(Uint32 ticks) {
 }
 
 void Gun::shoot(const Vector2f& pos, const int sign) {
-    if (!canShoot) {
-        std::cout << "can't shoot yet!" << std::endl;
+    static unsigned int prevTicks = 0;
+    unsigned int ticks = (Clock::getInstance()).getTicks() - prevTicks; 
+
+    if (ticks < fireRate) {
         return;
     }
+    
+    prevTicks = (Clock::getInstance()).getTicks();
 
     Bullet* bullet;
 
@@ -56,7 +57,7 @@ void Gun::shoot(const Vector2f& pos, const int sign) {
         freeBullets.pop_back();
         bullet->reset(startPos, bulletVelocity * sign); 
     } else {
-        bullet = new Bullet(getName() + "Bullet",
+        bullet = new Bullet(name + "Bullet",
                             startPos,
                             bulletVelocity * sign,
                             bulletDistance);

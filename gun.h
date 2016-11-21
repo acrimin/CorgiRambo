@@ -5,32 +5,32 @@
 #include <string>
 #include "bullet.h"
 
-class Gun : public Drawable {
+class Gun {
 public:
     Gun(const std::string&);
-    void shoot(const Vector2f& pos, const int sign);
+    void shoot(const Vector2f&, const int);
     const std::vector<Bullet*> getBullets() const { return outBullets; }
 
-    virtual ~Gun() { }
-
-    virtual const Frame* getFrame() const {
-        return frame;
+    const std::string& getName() const {
+        return name;
     }
-    virtual void draw() const;
-
-    virtual void update(Uint32 ticks);
+    
+    ~Gun() { }
+    void draw() const;
+    void update(Uint32 ticks);
 
 
 
 private:
     Gun(const Gun&);
     Gun& operator=(const Gun&);
-    
-    const Frame* frame;
+
+    std::string name;
     
     Vector2f bulletVelocity;
     Vector2f displacement;
     int bulletDistance;
+    unsigned int fireRate;
     
     bool canShoot;
 
