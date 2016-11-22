@@ -10,6 +10,7 @@ IOManager& IOManager::getInstance() {
 }
 
 IOManager::IOManager( ) :
+    hudMessages(),
     gdata( Gamedata::getInstance() ),
     viewWidth( gdata.getXmlInt("view/width") ),
     viewHeight( gdata.getXmlInt("view/height") ),
@@ -94,7 +95,7 @@ void IOManager::drawHud() const {
     Uint32 REDL = SDL_MapRGBA(screen->format, 255, 255, 150, 255); 
    
     short x1 = 20, y1 = 20;
-    short unsigned height = 360;
+    short unsigned height = 400;
     short unsigned width = 170; 
     //                  x0  y0  x1 y1  thick color
     Draw_AALine(screen, x1, y1, x1, y1+height, 2, RED);
@@ -124,6 +125,26 @@ void IOManager::printInHud(const std::string& msg, short y) const {
         string("Couldn't allocate text sureface in printMessageAt");
     }
 }
+
+void IOManager::addHudMessage(const string& msg) {
+    hudMessages.push_back(msg);
+}
+
+void IOManager::resetHudMessages() {
+    hudMessages.erase(hudMessages.begin(), hudMessages.end());
+}
+
+void IOManager::printHudMessages() const {
+    int space = 30;
+    for (unsigned int i = 0; i < hudMessages.size(); ++i) {
+        if (hudMessages[i][0] == '#') {
+            space += atoi(hudMessages[i].substr(1).c_str());
+        } else
+            printInHud(hudMessages[i], space = space + 20);
+    }
+}
+
+
 
 void IOManager::printStringAfterMessage( const string& msg,
         Uint32 x, Uint32 y ) const {

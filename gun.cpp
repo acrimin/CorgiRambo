@@ -31,7 +31,6 @@ void Gun::draw() const {
     for (unsigned int i = 0; i < outBullets.size(); ++i) {
         outBullets[i]->draw();
     }
-    IOManager::getInstance().printInHud("Free Bullets", 400);
 }
 
 void Gun::update(Uint32 ticks) {
@@ -45,7 +44,14 @@ void Gun::update(Uint32 ticks) {
             ++iter;
         }
     }
-    std::cout << outBullets.size() << " " << freeBullets.size() << std::endl;
+    char numstr[21];
+    sprintf(numstr, "%lu", outBullets.size());
+    std::string title = "Bullet List: ";
+    IOManager::getInstance().addHudMessage(title + numstr);
+    sprintf(numstr, "%lu", freeBullets.size());
+    title = "Free List: ";
+    IOManager::getInstance().addHudMessage(title + numstr);
+//    std::cout << outBullets.size() << " " << freeBullets.size() << std::endl;
 }
 
 void Gun::shoot(const Vector2f& pos, const int sign) {

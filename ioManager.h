@@ -7,6 +7,7 @@
 #include <sstream>
 using std::string;
 #include "gamedata.h"
+#include <vector>
 
 class IOManager {
 public:
@@ -54,10 +55,14 @@ public:
 
     void drawHud() const;
     void printInHud(const std::string&, short) const;
+    void addHudMessage(const string&);
+    void resetHudMessages();
+    void printHudMessages() const;
 private:
     IOManager();
     IOManager(const IOManager&);
     IOManager& operator=(const IOManager&);
+    std::vector<std::string> hudMessages;
     const Gamedata& gdata;
     int viewWidth;
     int viewHeight;

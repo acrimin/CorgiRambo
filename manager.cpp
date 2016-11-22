@@ -99,25 +99,8 @@ void Manager::draw() const {
 
     if (hud) {
         io.drawHud();
-
         clock.display();
-        int s = 50;
-        io.printInHud("Press T to switch", s+=0);
-        io.printInHud("sprites", s+=20);
-        s += 10;
-        io.printInHud("Tracking "+sprites[currentSprite]->getName(), s+=20);
-        s += 5;
-        io.printInHud("F1 toggles HUD", s+=20);
-        io.printInHud("F2 Slo-Mo", s+=20);
-        io.printInHud("F4 Record", s+=20);
-        io.printInHud("P pause", s+=20);
-        io.printInHud("R restart", s+=20);
-        s += 10;
-        io.printInHud("A/D Left Right", s+=20);
-        io.printInHud("W Jump", s+=20);
-        io.printInHud("Left Shift Sprint", s+=20);
-        io.printInHud("Space Shoots", s+=20);
-        io.printInHud("E Toggles Gun", s+=20);
+        io.printHudMessages();
     }
     viewport.draw();
 
@@ -140,6 +123,8 @@ void Manager::switchSprite() {
 }
 
 void Manager::update() {
+    IOManager::getInstance().resetHudMessages();
+
     ++(clock);
     Uint32 ticks = clock.getElapsedTicks();
 
@@ -189,6 +174,23 @@ void Manager::update() {
         two = true;
         hud = false;
     }
+    
+    IOManager::getInstance().addHudMessage("Press T to switch");
+    IOManager::getInstance().addHudMessage("sprites");
+    IOManager::getInstance().addHudMessage("#10");
+    IOManager::getInstance().addHudMessage("Tracking "+sprites[currentSprite]->getName());
+    IOManager::getInstance().addHudMessage("#10");
+    IOManager::getInstance().addHudMessage("F1 toggles HUD");
+    IOManager::getInstance().addHudMessage("F2 Slo-Mo");
+    IOManager::getInstance().addHudMessage("F4 Record");
+    IOManager::getInstance().addHudMessage("P pause");
+    IOManager::getInstance().addHudMessage("R restart");
+    IOManager::getInstance().addHudMessage("#10");
+    IOManager::getInstance().addHudMessage("A/D Left Right");
+    IOManager::getInstance().addHudMessage("W Jump");
+    IOManager::getInstance().addHudMessage("Left Shift Sprint");
+    IOManager::getInstance().addHudMessage("Space Shoots");
+    IOManager::getInstance().addHudMessage("E Toggles Gun");
 }
 
 bool Manager::play() {
