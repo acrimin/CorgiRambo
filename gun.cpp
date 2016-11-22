@@ -1,6 +1,7 @@
 #include "gamedata.h"
 #include "frameFactory.h"
 #include "gun.h"
+#include "ioManager.h"
 #include "clock.h"
 
 Gun::Gun(const std::string& name) :
@@ -12,14 +13,25 @@ Gun::Gun(const std::string& name) :
     fireRate(Gamedata::getInstance().getXmlInt(name+"/fireRate")), 
     canShoot(true),
     outBullets(),
-    freeBullets()
+    freeBullets(),
+    damage(Gamedata::getInstance().getXmlInt(name+"/damage"))
 { 
+}
+
+Gun::~Gun() {
+    for (unsigned int i = 0; i < outBullets.size(); ++i) {
+        delete outBullets[i];
+    }
+    for (unsigned int i = 0; i < freeBullets.size(); ++i) {
+        delete freeBullets[i];
+    }
 }
 
 void Gun::draw() const {
     for (unsigned int i = 0; i < outBullets.size(); ++i) {
         outBullets[i]->draw();
     }
+    IOManager::getInstance().printInHud("Free Bullets", 400);
 }
 
 void Gun::update(Uint32 ticks) {
@@ -33,7 +45,6 @@ void Gun::update(Uint32 ticks) {
             ++iter;
         }
     }
-
     std::cout << outBullets.size() << " " << freeBullets.size() << std::endl;
 }
 
@@ -64,4 +75,16 @@ void Gun::shoot(const Vector2f& pos, const int sign) {
     }
 
     outBullets.push_back(bullet);
+}
+
+
+bool Gun::collidedWith(Drawable* d) {
+    for (unsigned int i = 0; i < outBullets.size(); ++i) {
+        if (outBullets[i]->collidedWith(d)) {
+            outBullets[i]->explode();
+            if (d->hurt(damage)) //kill
+                return true;
+        }
+    }
+    return false;
 }

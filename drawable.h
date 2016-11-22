@@ -71,8 +71,12 @@ public:
         position = pos;
     }
 
-    virtual bool collidedWith(const Drawable*) const {
+    virtual bool collidedWith(Drawable*) const {
         throw std::string("No collidedWith");
+    }
+
+    virtual bool hurt(int) {
+        return false;
     }
 
 private:

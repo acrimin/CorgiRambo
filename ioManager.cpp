@@ -94,7 +94,7 @@ void IOManager::drawHud() const {
     Uint32 REDL = SDL_MapRGBA(screen->format, 255, 255, 150, 255); 
    
     short x1 = 20, y1 = 20;
-    short unsigned height = 300;
+    short unsigned height = 360;
     short unsigned width = 170; 
     //                  x0  y0  x1 y1  thick color
     Draw_AALine(screen, x1, y1, x1, y1+height, 2, RED);

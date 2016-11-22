@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "drawable.h"
+#include "collisionStrategy.h"
 
 class Bullet : public Drawable {
 public:
@@ -21,6 +22,7 @@ public:
     virtual void draw() const;
     void reset(const Vector2f&, const Vector2f&);
     void explode();
+    bool collidedWith(Drawable*) const;
 
     virtual void update(Uint32 ticks);
 
@@ -34,5 +36,6 @@ private:
     int maxDistance;
     int distance;
     bool done;
+    Collision* strategy;
 };
 #endif

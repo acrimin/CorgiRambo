@@ -3,29 +3,35 @@
 #include <string>
 #include <vector>
 #include "drawable.h"
+#include "collisionStrategy.h"
+#include "explodingSprite.h"
 #include "gun.h"
 
 class Player : public Drawable {
 public:
-    Player(const std::string&, Gun*);
+    Player(const std::string&);
     Player(const Player&);
-    virtual ~Player() { }
+    virtual ~Player(); 
 
     virtual void draw() const;
     virtual void update(Uint32 ticks);
     virtual const Frame* getFrame() const {
         return frames[currentFrame];
     }
+    bool collidedWith(Drawable*);
+    bool hurt(int);
     void right(bool);
     void left(bool);
     void shift(bool);
     void shoot(bool);
-    void changeGun(Gun* gun);
+    void changeGun();
     void up();
 
 protected:
     Player operator=(const Player&);
-    const std::vector<Frame *> frames;
+    void explode();
+    std::vector<Frame *> frames;
+    ExplodingSprite* explosion;
     int worldWidth;
     int worldHeight;
 
@@ -54,8 +60,10 @@ protected:
     float speedMultiplier;
     float frameMultiplier;
 
-    Gun* gun;
+    std::vector<Gun*> guns;
+    int currentGun;
     bool shooting;
+    int health;
 };
 
 #endif

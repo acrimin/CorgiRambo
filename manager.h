@@ -5,13 +5,14 @@
 #include "world.h"
 #include "viewport.h"
 #include "player.h"
+#include "npc.h"
 #include "scaledtwowaysprite.h"
 
 class Manager {
 public:
     Manager ();
     ~Manager ();
-    void play();
+    bool play();
     void switchSprite();
 
 private:
@@ -24,8 +25,8 @@ private:
     Viewport& viewport;
 
     std::vector<Drawable*> sprites;
+    std::vector<NPC*> dying;
     std::vector<ScaledTwoWaySprite*> paintedSprites;
-    std::vector<Gun*> guns;
     Player* player;
     int currentSprite;
 

@@ -12,8 +12,8 @@
 <username>acrimin</username>
 
 <view>
-  <width>853</width>
-  <height>480</height>
+  <width>1040</width>
+  <height>585</height>
 </view>
 
 <world>
@@ -60,7 +60,10 @@
 
 <corgi>
   <file>images/corgis.bmp</file>
+  <health>200</health>
   <frames>12</frames>
+  <chunk><size>64</size></chunk>
+  <chunk><distance>100</distance></chunk>
   <AK47><file>images/corgisAK.bmp</file></AK47>
   <AK47><frames>12</frames></AK47>
   <Bazooka><file>images/corgisBazooka.bmp</file></Bazooka>
@@ -72,6 +75,19 @@
   <traction>580</traction>
   <transparency>true</transparency>
 </corgi>
+
+<tank>
+  <file>images/tanks.bmp</file>
+  <health>1000</health>
+  <frames>4</frames>
+  <chunk><size>64</size></chunk>
+  <chunk><distance>100</distance></chunk>
+  <startLoc x="1700" y="800"/>
+  <speedX>-75</speedX>
+  <speedY>0</speedY>
+  <frameInterval>80</frameInterval>
+  <transparency>true</transparency>
+</tank>
 
 <birds>
   <file>images/birds2.bmp</file>
@@ -87,6 +103,7 @@
     <file>images/AK47.bmp</file>
     <startLoc x="120" y="820"/>
     <displacement x="143" y="46"/>
+    <damage>10</damage>
     <distance>500</distance>
     <speed>500</speed>
     <fireRate>75</fireRate>
@@ -103,6 +120,7 @@
 
  <Bazooka>
     <file>images/bazooka.bmp</file>
+    <damage>250</damage>
     <startLoc x="120" y="820"/>
     <displacement x="143" y="46"/>
     <distance>500</distance>

@@ -15,9 +15,10 @@ public:
         return name;
     }
     
-    ~Gun() { }
+    ~Gun();
     void draw() const;
     void update(Uint32 ticks);
+    bool collidedWith(Drawable*);
 
 
 
@@ -36,6 +37,8 @@ private:
 
     std::vector<Bullet*> outBullets;
     std::vector<Bullet*> freeBullets;
+
+    int damage;
 };
 
 #endif

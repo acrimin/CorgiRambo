@@ -7,6 +7,7 @@
 #include "twowaysprite.h"
 #include "scaledtwowaysprite.h"
 #include "sprite.h"
+#include "npc.h"
 #include "gamedata.h"
 #include "manager.h"
 
@@ -30,6 +31,10 @@ Manager::~Manager() {
     for (unsigned i = 0; i < paintedSprites.size(); ++i) {
         delete paintedSprites[i];
     }
+
+    for (unsigned i = 0; i < dying.size(); ++i) {
+        delete dying[i];
+    }
 }
 
 Manager::Manager() :
@@ -40,8 +45,8 @@ Manager::Manager() :
     world(),
     viewport( Viewport::getInstance() ),
     sprites(),
+    dying(),
     paintedSprites(),
-    guns(),
     player(),
     currentSprite(0),
 
@@ -62,14 +67,14 @@ Manager::Manager() :
     world.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor")));
     world.push_back(new World("drive", Gamedata::getInstance().getXmlInt("drive/factor")));
 
-    guns.push_back( new Gun("AK47") );
-    guns.push_back( new Gun("Bazooka") );
-    sprites.push_back( new Player("corgi", guns[0]) );
+    sprites.push_back( new Player("corgi") );
+    sprites.push_back( new NPC("tank") );
     player = (Player*) sprites[0];
     
     for (int i = 0; i < Gamedata::getInstance().getXmlInt("birds/count"); i++) {
         paintedSprites.push_back( new ScaledTwoWaySprite("birds") );
     }
+
     sort(paintedSprites.begin(), paintedSprites.end(), ScaledSpriteCompare());    
     viewport.setObjectToTrack(sprites[currentSprite]);
 }
@@ -83,27 +88,38 @@ void Manager::draw() const {
             paintedSprites[n]->draw();
         }
     }
+
     for (unsigned i = 0; i < sprites.size(); ++i) {
         sprites[i]->draw();
+    }
+
+    for (unsigned i = 0; i < dying.size(); ++i) {
+        dying[i]->draw();
     }
 
     if (hud) {
         io.drawHud();
 
         clock.display();
-        io.printInHud("Press T to switch", 50);
-        io.printInHud("sprites", 75);
-        io.printInHud("Tracking "+sprites[currentSprite]->getName(), 100);
-        io.printInHud("F1 toggles HUD", 130);
-        io.printInHud("F2 Slo-Mo", 150);
-        io.printInHud("F4 Record", 170);
-        io.printInHud("P pause", 190);
-        io.printInHud("A/D Left Right", 220);
-        io.printInHud("W Jump", 240);
-        io.printInHud("Left Shift Sprint", 260);
+        int s = 50;
+        io.printInHud("Press T to switch", s+=0);
+        io.printInHud("sprites", s+=20);
+        s += 10;
+        io.printInHud("Tracking "+sprites[currentSprite]->getName(), s+=20);
+        s += 5;
+        io.printInHud("F1 toggles HUD", s+=20);
+        io.printInHud("F2 Slo-Mo", s+=20);
+        io.printInHud("F4 Record", s+=20);
+        io.printInHud("P pause", s+=20);
+        io.printInHud("R restart", s+=20);
+        s += 10;
+        io.printInHud("A/D Left Right", s+=20);
+        io.printInHud("W Jump", s+=20);
+        io.printInHud("Left Shift Sprint", s+=20);
+        io.printInHud("Space Shoots", s+=20);
+        io.printInHud("E Toggles Gun", s+=20);
     }
     viewport.draw();
-
 
     SDL_Flip(screen);
 }
@@ -127,6 +143,18 @@ void Manager::update() {
     ++(clock);
     Uint32 ticks = clock.getElapsedTicks();
 
+    // Check collisions
+    std::vector<Drawable*>::iterator iter = sprites.begin();
+    ++iter; // increment off player
+    while (iter != sprites.end()) {
+        if (player->collidedWith(*iter)) {
+            std::cout << "killed" << std::endl;
+            dying.push_back(static_cast<NPC*>(*iter));
+            iter = sprites.erase(iter);
+        } else
+            ++iter;
+    }
+
     static unsigned int lastSeconds = clock.getSeconds();
     if ( clock.getSeconds() - lastSeconds == 5 ) {
         lastSeconds = clock.getSeconds();
@@ -136,6 +164,16 @@ void Manager::update() {
     for (unsigned int i = 0; i < sprites.size(); ++i) {
         sprites[i]->update(ticks);
     }
+
+    std::vector<NPC*>::iterator it = dying.begin();
+    while (it != dying.end()) {
+        (*it)->update(ticks);
+        if ((*it)->doneExploding())
+            it = dying.erase(it);
+        else
+            ++it;
+    }
+
     for (unsigned int i = 0; i < paintedSprites.size(); ++i) {
         paintedSprites[i]->update(ticks);
     }
@@ -153,7 +191,7 @@ void Manager::update() {
     }
 }
 
-void Manager::play() {
+bool Manager::play() {
     SDL_Event event;
     bool done = false;
 
@@ -182,6 +220,9 @@ void Manager::play() {
                     if ( clock.isPaused() ) clock.unpause();
                     else clock.pause();
                 }
+                if ( keystate[SDLK_r] ) {
+                    return true;
+                }
                 if (keystate[SDLK_F4] && !makeVideo) {
                     std::cout << "Making video frames" << std::endl;
                     makeVideo = true;
@@ -196,6 +237,9 @@ void Manager::play() {
                 }
                 if (keystate[SDLK_w]) {
                     player->up();
+                }
+                if (keystate[SDLK_e]) {
+                    player->changeGun();
                 }
                 if (keystate[SDLK_LSHIFT]) {
                     player->shift(true);
@@ -226,4 +270,5 @@ void Manager::play() {
         update();
         
     }
+    return false;
 }

@@ -12,7 +12,8 @@ Bullet::Bullet(const string& n, const Vector2f& pos, const Vector2f& vel, int di
 
     maxDistance(dis),
     distance(0),
-    done(false)
+    done(false),
+    strategy(new Collision)
 { }
 
 Bullet::Bullet(const Bullet& s) :
@@ -23,7 +24,8 @@ Bullet::Bullet(const Bullet& s) :
 
     maxDistance(s.maxDistance),
     distance(s.distance),
-    done(s.done)
+    done(s.done),
+    strategy(s.strategy)
 { }
 
 void Bullet::draw() const {
@@ -45,9 +47,17 @@ void Bullet::update(Uint32 ticks) {
     setPosition(getPosition() + incr);
 }
 
+bool Bullet::collidedWith(Drawable* d) const {
+    return Collision::getInstance().executePerPixel(*this, *d);
+}
+
 void Bullet::reset(const Vector2f& pos, const Vector2f& vel) {
     setPosition(pos);
     setVelocity(vel);
     distance = 0;
     done = false;
+}
+
+void Bullet::explode() {
+    done = true;
 }

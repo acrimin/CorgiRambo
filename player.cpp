@@ -12,12 +12,13 @@ void Player::advanceFrame(Uint32 ticks) {
     }
 }
 
-Player::Player( const std::string& name, Gun* startGun) :
+Player::Player(const std::string& name) :
     Drawable(name,
              Vector2f(Gamedata::getInstance().getXmlInt(name+"/startLoc/x"),
                       Gamedata::getInstance().getXmlInt(name+"/startLoc/y")),
              Vector2f(0, 0)),
-    frames( FrameFactory::getInstance().getFrames(name + "/" + startGun->getName()) ),
+    frames(FrameFactory::getInstance().getFrames(name)),
+    explosion(NULL),
     worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
     worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
 
@@ -39,14 +40,20 @@ Player::Player( const std::string& name, Gun* startGun) :
     standFrame(4),
     speedMultiplier(1),
     frameMultiplier(1),
-    gun(startGun),
-    shooting(false)
-{ 
+    guns(),
+    currentGun(0),
+    shooting(false),
+    health(Gamedata::getInstance().getXmlInt(name+"/health"))
+{
+    guns.push_back( new Gun("AK47") );
+    guns.push_back( new Gun("Bazooka") );
+    frames = FrameFactory::getInstance().getFrames(name + "/" + guns[currentGun]->getName());
 }
 
 Player::Player(const Player& s) :
     Drawable(s),
     frames(s.frames),
+    explosion(s.explosion),
     worldWidth( s.worldWidth ),
     worldHeight( s.worldHeight ),
     currentFrame(s.currentFrame),
@@ -66,21 +73,44 @@ Player::Player(const Player& s) :
     standFrame(s.standFrame),
     speedMultiplier(s.speedMultiplier),
     frameMultiplier(s.frameMultiplier),
-    gun(s.gun),
-    shooting(s.shooting)
+    guns(s.guns),
+    currentGun(s.currentGun),
+    shooting(s.shooting),
+    health(s.health)
 { }
 
+Player::~Player() {
+    if (explosion)
+        delete explosion;
+
+    for (unsigned int i = 0; i < guns.size(); ++i) {
+        delete guns[i];
+    }
+}
+
 void Player::draw() const {
+    if (explosion) {
+        explosion->draw();
+        return;
+    }
     Uint32 x = static_cast<Uint32>(X());
     Uint32 y = static_cast<Uint32>(Y());
     frames[currentFrame + face]->draw(x, y);
 
-    gun->draw();
+    guns[currentGun]->draw();
 }
 
 void Player::update(Uint32 ticks) {
-
-    if (abs(velocityX()) > 0 && xMove == 0) {
+    if (explosion) {
+        explosion->update(ticks);
+        if (explosion->chunkCount() == 0) {
+            delete explosion;
+            explosion = NULL;
+            setPosition(Vector2f(Gamedata::getInstance().getXmlInt(getName()+"/startLoc/x"), 50));
+        } 
+        return;
+    }
+    if (std::abs(velocityX()) > 0 && xMove == 0) {
         velocityX(velocityX() - // traction * abs(velocityX())/velocityX()); 
         round(static_cast<float>(traction) * 
         static_cast<float>(abs(velocityX())/velocityX()) * 
@@ -118,8 +148,36 @@ void Player::update(Uint32 ticks) {
     setPosition(getPosition() + incr);
 
     if (shooting) 
-        gun->shoot(getPosition() + Vector2f(face ? frameWidth : 0, 0), face ? -1 : 1);
-    gun->update(ticks);
+        guns[currentGun]->shoot(getPosition() + Vector2f(face ? frameWidth : 0, 0), 
+                                                         face ? -1 : 1);
+    guns[currentGun]->update(ticks);
+}
+
+bool Player::collidedWith(Drawable* d) {
+    if (explosion)
+        return false;
+    if (Collision::getInstance().executePerPixel(*this, *d)) {
+        explode();
+        return false;
+    }
+    return guns[currentGun]->collidedWith(d);
+}
+
+void Player::explode() {
+    Sprite sprite = Sprite(getName(), 
+                           getPosition(), 
+                           Vector2f(0,0), 
+                           frames[currentFrame + face]);
+    explosion = new ExplodingSprite(sprite);
+}
+
+bool Player::hurt(int damage) {
+    health -= damage;
+    if (health <= 0) {
+        explode();
+        return true;
+    }
+    return false;
 }
 
 void Player::left(bool down) {
@@ -143,8 +201,10 @@ void Player::up() {
         velocityY(maxYSpeed);
 }
 
-void Player::changeGun(Gun* gun) {
-    
+void Player::changeGun() {
+    currentGun = (currentGun + 1) % guns.size();
+    frames = FrameFactory::getInstance().getFrames(getName() + "/" + 
+                                                   guns[currentGun]->getName());
 }
 
 void Player::shift(bool down) {
