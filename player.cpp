@@ -2,6 +2,7 @@
 #include "gamedata.h"
 #include "frameFactory.h"
 #include "gun.h"
+#include "ioManager.h"
 #include <cmath>
 
 void Player::advanceFrame(Uint32 ticks) {
@@ -43,7 +44,9 @@ Player::Player(const std::string& name) :
     guns(),
     currentGun(0),
     shooting(false),
-    health(Gamedata::getInstance().getXmlInt(name+"/health"))
+    health(Gamedata::getInstance().getXmlInt(name+"/health")),
+    godMode(false),
+    healthBar(health)
 {
     guns.push_back( new Gun("AK47") );
     guns.push_back( new Gun("Bazooka") );
@@ -76,7 +79,9 @@ Player::Player(const Player& s) :
     guns(s.guns),
     currentGun(s.currentGun),
     shooting(s.shooting),
-    health(s.health)
+    health(s.health),
+    godMode(s.godMode),
+    healthBar(s.healthBar)
 { }
 
 Player::~Player() {
@@ -164,6 +169,8 @@ bool Player::collidedWith(Drawable* d) {
 }
 
 void Player::explode() {
+    if (godMode) 
+        return;
     Sprite sprite = Sprite(getName(), 
                            getPosition(), 
                            Vector2f(0,0), 
@@ -172,6 +179,8 @@ void Player::explode() {
 }
 
 bool Player::hurt(int damage) {
+    if (godMode)
+        return false;
     health -= damage;
     if (health <= 0) {
         explode();
@@ -218,4 +227,8 @@ void Player::shift(bool down) {
 
 void Player::shoot(bool down) {
     shooting = down;
+}
+
+void Player::toggleGodMode() {
+    godMode = !godMode;
 }

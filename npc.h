@@ -3,6 +3,7 @@
 #include "drawable.h"
 #include "explodingSprite.h"
 #include "twowaysprite.h"
+#include "healthBar.h"
 
 class NPC : public TwoWaySprite {
 public:
@@ -20,6 +21,8 @@ private:
     void explode();
     int health;
     ExplodingSprite* explosion;
+    HealthBar healthBar;
+    unsigned int healthEndTime;
 };
 
 #endif

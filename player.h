@@ -5,6 +5,7 @@
 #include "drawable.h"
 #include "collisionStrategy.h"
 #include "explodingSprite.h"
+#include "healthBar.h"
 #include "gun.h"
 
 class Player : public Drawable {
@@ -26,6 +27,7 @@ public:
     void shoot(bool);
     void changeGun();
     void up();
+    void toggleGodMode();
 
 protected:
     Player operator=(const Player&);
@@ -64,6 +66,8 @@ protected:
     int currentGun;
     bool shooting;
     int health;
+    bool godMode;
+    HealthBar healthBar;
 };
 
 #endif

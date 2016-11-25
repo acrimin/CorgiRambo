@@ -15,4 +15,3 @@ void Draw_AALine(SDL_Surface* screen, float x0, float y0,
                  float x1, float y1, uint32_t color);
 
 #endif
-

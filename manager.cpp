@@ -133,7 +133,6 @@ void Manager::update() {
     ++iter; // increment off player
     while (iter != sprites.end()) {
         if (player->collidedWith(*iter)) {
-            std::cout << "killed" << std::endl;
             dying.push_back(static_cast<NPC*>(*iter));
             iter = sprites.erase(iter);
         } else
@@ -217,6 +216,9 @@ bool Manager::play() {
                 }
                 if ( keystate[SDLK_F1] ) {
                     hud = !hud;
+                }
+                if ( keystate[SDLK_g] ) {
+                    player->toggleGodMode();
                 }
                 if ( keystate[SDLK_p] ) {
                     if ( clock.isPaused() ) clock.unpause();

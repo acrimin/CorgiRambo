@@ -1,15 +1,21 @@
 #include "npc.h"
+#include "ioManager.h"
+#include "clock.h"
 
 NPC::NPC(const std::string& name) :
     TwoWaySprite(name),
     health(Gamedata::getInstance().getXmlInt(name+"/health")),
-    explosion(NULL)
+    explosion(NULL),
+    healthBar(health),
+    healthEndTime(0)
 {}
 
 NPC::NPC(const NPC& n) :
     TwoWaySprite(n),
     health(n.health),
-    explosion(n.explosion)
+    explosion(n.explosion),
+    healthBar(n.healthBar),
+    healthEndTime(n.healthEndTime)
 {}
 
 NPC::~NPC() {
@@ -23,6 +29,9 @@ void NPC::draw() const {
         return;
     }
     TwoWaySprite::draw();
+
+    if (Clock::getInstance().getTicks() < healthEndTime)
+        healthBar.draw(getPosition() + Vector2f(frameWidth/2, -30), health);
 }
 
 void NPC::update(Uint32 ticks) {
@@ -56,8 +65,10 @@ bool NPC::doneExploding() {
 bool NPC::hurt(int damage) {
     if (explosion)
         return false;
+        
+    healthEndTime = Clock::getInstance().getTicks() + 2000;
+
     health -= damage;
-    std::cout << health << std::endl;
     if (health <= 0) {
         explode();
         return true;

@@ -82,7 +82,7 @@
   <frames>4</frames>
   <chunk><size>64</size></chunk>
   <chunk><distance>100</distance></chunk>
-  <startLoc x="1700" y="800"/>
+  <startLoc x="2000" y="800"/>
   <speedX>-75</speedX>
   <speedY>0</speedY>
   <frameInterval>80</frameInterval>
