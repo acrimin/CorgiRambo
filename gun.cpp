@@ -3,20 +3,21 @@
 #include "gun.h"
 #include "ioManager.h"
 #include "clock.h"
+#include "sound.h"
 
-Gun::Gun(const std::string& name) :
+Gun::Gun(const std::string& name, const Vector2f& disp) :
     name(name),
+    prevTicks(0),
     bulletVelocity(Gamedata::getInstance().getXmlInt(name+"/speed"),0),
-    displacement(Gamedata::getInstance().getXmlInt(name+"/displacement/x"),
-                 Gamedata::getInstance().getXmlInt(name+"/displacement/y")), 
+    displacement(disp),
     bulletDistance(Gamedata::getInstance().getXmlInt(name+"/distance")),
     fireRate(Gamedata::getInstance().getXmlInt(name+"/fireRate")), 
     canShoot(true),
     outBullets(),
     freeBullets(),
-    damage(Gamedata::getInstance().getXmlInt(name+"/damage"))
-{ 
-}
+    damage(Gamedata::getInstance().getXmlInt(name+"/damage")),
+    sound(Gamedata::getInstance().getXmlInt(name+"/sound"))
+{ }
 
 Gun::~Gun() {
     for (unsigned int i = 0; i < outBullets.size(); ++i) {
@@ -55,8 +56,7 @@ void Gun::update(Uint32 ticks) {
 }
 
 void Gun::shoot(const Vector2f& pos, const int sign) {
-    static unsigned int prevTicks = 0;
-    unsigned int ticks = (Clock::getInstance()).getTicks() - prevTicks; 
+    unsigned ticks = (Clock::getInstance()).getTicks() - prevTicks; 
 
     if (ticks < fireRate) {
         return;
@@ -81,8 +81,9 @@ void Gun::shoot(const Vector2f& pos, const int sign) {
     }
 
     outBullets.push_back(bullet);
-}
 
+    SDLSound::getInstance()[sound];
+}
 
 bool Gun::collidedWith(Drawable* d) {
     for (unsigned int i = 0; i < outBullets.size(); ++i) {

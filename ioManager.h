@@ -15,9 +15,7 @@ public:
     SDL_Surface * getScreen() const {
         return screen;
     }
-    ~IOManager() {
-        TTF_CloseFont(font);
-    }
+    ~IOManager();
     SDL_Surface* loadAndSet(const string& filename, bool setcolorkey) const;
 
     void printMessageAt(const string& msg, Sint16 x, Sint16 y) const;

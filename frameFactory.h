@@ -37,7 +37,6 @@ public:
     // passed as parameters to the Frame constructor, but the Frame
     // width and height will be obtained from the XML:
     std::vector<Frame*> getFrames(const std::string&);
-    std::vector<Frame*> getFrames(const std::string&, float);
 
 private:
     const Gamedata& gdata;

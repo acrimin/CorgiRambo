@@ -45,7 +45,15 @@ isVisible(Uint32 pixel, SDL_Surface *surface) const {
 }
 
 bool Collision::executePerPixel(
-      const Drawable& obj1, const Drawable& obj2) const {
+    const Drawable& obj1, const Drawable& obj2) const {
+   
+    Vector2f vec = Vector2f(0,0); 
+    bool val = executePerPixel(obj1, obj2, vec);
+    return val;
+}
+
+bool Collision::executePerPixel(
+      const Drawable& obj1, const Drawable& obj2, Vector2f& hitLoc) const {
 
   if ( not executeRectangle(obj1, obj2) ) return false;
   // If we got this far, we know that the sprite rectangles intersect!
@@ -107,6 +115,8 @@ bool Collision::executePerPixel(
       if ( isVisible(pixel1,surface1) && isVisible(pixel2,surface2) ) {
         SDL_UnlockSurface(surface1);
         SDL_UnlockSurface(surface2);
+        hitLoc[0] = x-p1[0];
+        hitLoc[1] = y-p1[1];
         return true;
       }
     }

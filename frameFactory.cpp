@@ -10,7 +10,7 @@ FrameFactory::~FrameFactory() {
     std::map<std::string, SDL_Surface*>::iterator itSurf = surfaces.begin();
     while ( itSurf != surfaces.end() ) {
         SDL_FreeSurface( itSurf->second );
-        ++itSurf;
+        ++itSurf; 
     }
     std::map<std::string, std::vector<SDL_Surface*> >::iterator
     surfaces = multiSurfaces.begin();
@@ -87,43 +87,6 @@ std::vector<Frame*> FrameFactory::getFrames(const std::string& name) {
     SDL_FreeSurface(surface);
     multiSurfaces[name] = surfaces;
     multiFrames[name] = frames;
-    return frames;
-}
-
-std::vector<Frame*> FrameFactory::getFrames(const std::string& name, float scale) {
-    std::ostringstream buff;
-    buff << scale;
-    string num = buff.str();
-    // First search map to see if we've already made it:
-    std::map<std::string, std::vector<Frame*> >::const_iterator
-    pos = multiFrames.find(name+num);
-    if ( pos != multiFrames.end() ) {
-        return pos->second;
-    }
-
-    // It wasn't in the map, so we have to make the vector of Frames:
-    SDL_Surface* surface = rotozoomSurface(
-        IOManager::getInstance().loadAndSet(gdata.getXmlStr(name+"/file"), true), 
-        0, scale, SMOOTHING_ON);
-    unsigned numberOfFrames = gdata.getXmlInt(name+"/frames");
-    std::vector<Frame*> frames;
-    std::vector<SDL_Surface*> surfaces;
-    frames.reserve(numberOfFrames);
-
-    Uint16 width = surface->w/numberOfFrames;
-    Uint16 height = surface->h;
-
-    SDL_Surface* surf;
-    for (unsigned i = 0; i < numberOfFrames; ++i) {
-        unsigned frameX = i * width;
-        surf = ExtractSurface::getInstance().
-               get(surface, width, height, frameX, 0);
-        surfaces.push_back( surf );
-        frames.push_back( new Frame(surf) );
-    }
-    SDL_FreeSurface(surface);
-    multiSurfaces[name+num] = surfaces;
-    multiFrames[name+num]= frames;
     return frames;
 }
 

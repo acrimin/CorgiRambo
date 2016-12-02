@@ -10,6 +10,7 @@
 #include "npc.h"
 #include "gamedata.h"
 #include "manager.h"
+#include "sound.h"
 
 class ScaledSpriteCompare {
 public:
@@ -67,9 +68,10 @@ Manager::Manager() :
     world.push_back(new World("mountains", Gamedata::getInstance().getXmlInt("mountains/factor")));
     world.push_back(new World("drive", Gamedata::getInstance().getXmlInt("drive/factor")));
 
-    sprites.push_back( new Player("corgi") );
-    sprites.push_back( new NPC("tank") );
-    player = (Player*) sprites[0];
+
+    player = new Player("corgi");
+    sprites.push_back( player );
+    sprites.push_back( new NPC("tank", *player) );
     
     for (int i = 0; i < Gamedata::getInstance().getXmlInt("birds/count"); i++) {
         paintedSprites.push_back( new ScaledTwoWaySprite("birds") );
@@ -195,6 +197,7 @@ void Manager::update() {
 bool Manager::play() {
     SDL_Event event;
     bool done = false;
+    SDLSound::getInstance();
 
     while ( not done ) {
         while ( SDL_PollEvent(&event) ) {
@@ -242,6 +245,9 @@ bool Manager::play() {
                 if (keystate[SDLK_w]) {
                     player->up();
                 }
+                if (keystate[SDLK_s]) {
+                    player->down(true);
+                }
                 if (keystate[SDLK_e]) {
                     player->changeGun();
                 }
@@ -259,6 +265,9 @@ bool Manager::play() {
                 }
                 if (event.key.keysym.sym == SDLK_d) {
                     player->right(false);
+                }
+                if (event.key.keysym.sym == SDLK_s) {
+                    player->down(false);
                 }
                 if (event.key.keysym.sym == SDLK_LSHIFT) {
                     player->shift(false);

@@ -30,6 +30,9 @@ private:
     Bullet& operator=(const Bullet& rhs);
 
     std::vector<Frame*> frames;
+    bool exploding;
+    bool explodes;
+    unsigned explodeTime;
     int frameWidth;
     int frameHeight;
 

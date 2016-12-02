@@ -8,6 +8,14 @@ IOManager& IOManager::getInstance() {
     static IOManager io;
     return io;
 }
+    
+IOManager::~IOManager() {
+    TTF_CloseFont(font);
+
+//    std::vector<std::string>::iterator iter = hudMessages.begin();
+//    while (hudMessages.begin() != hudMessages.end())
+//        iter = hudMessages.erase(iter);
+}
 
 IOManager::IOManager( ) :
     hudMessages(),

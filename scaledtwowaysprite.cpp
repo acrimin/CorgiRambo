@@ -2,6 +2,8 @@
 #include "gamedata.h"
 #include "frameFactory.h"
 #include <cmath>
+#include <algorithm>
+#include "SDL/SDL_rotozoom.h"
 
 void ScaledTwoWaySprite::advanceFrame(Uint32 ticks) {
     timeSinceLastFrame += ticks;
@@ -11,14 +13,18 @@ void ScaledTwoWaySprite::advanceFrame(Uint32 ticks) {
     }
 }
 
+ScaledTwoWaySprite::~ScaledTwoWaySprite() {
+    for (unsigned i = 0; i < frames.size(); ++i)
+        delete frames[i];
+}
+
 ScaledTwoWaySprite::ScaledTwoWaySprite( const std::string& name) :
     Drawable(name, Vector2f(0, 0), Vector2f(0, 0)),
     
-    minScale(Gamedata::getInstance().getXmlFloat(name+"/scale")),
-    scale(roundf((minScale + 
-        ((((float) rand()) / (float) RAND_MAX) * 
-        (1 - minScale))) * 10) / 10),
-    frames( FrameFactory::getInstance().getFrames(name, scale) ),
+    minScale(Gamedata::getInstance().getXmlFloat(name+"/scale/min")),
+    maxScale(Gamedata::getInstance().getXmlFloat(name+"/scale/max")),
+    scale(static_cast<float>(rand())/(static_cast<float>(RAND_MAX/(maxScale-minScale))) + minScale),
+    frames(),
     worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
     worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
 
@@ -26,9 +32,14 @@ ScaledTwoWaySprite::ScaledTwoWaySprite( const std::string& name) :
     numberOfFrames( Gamedata::getInstance().getXmlInt(name+"/frames") ),
     frameInterval( Gamedata::getInstance().getXmlInt(name+"/frameInterval") ),
     timeSinceLastFrame( 0 ),
-    frameWidth(frames[0]->getWidth()),
-    frameHeight(frames[0]->getHeight())
+    frameWidth(0),
+    frameHeight(0)
 { 
+    std::vector<Frame *> tempFrames = FrameFactory::getInstance().getFrames(name);
+    for (unsigned i = 0; i < tempFrames.size(); ++i) {
+        frames.push_back(new Frame(*tempFrames[i]));
+        frames[i]->scaleSurface(scale);
+    }
 
     frameWidth = frames[0]->getWidth();
     frameHeight = frames[0]->getHeight();
@@ -48,6 +59,7 @@ ScaledTwoWaySprite::ScaledTwoWaySprite( const std::string& name) :
 ScaledTwoWaySprite::ScaledTwoWaySprite(const ScaledTwoWaySprite& s) :
     Drawable(s),
     minScale(s.minScale),
+    maxScale(s.maxScale),
     scale(s.scale),
     frames(s.frames),
     worldWidth( s.worldWidth ),

@@ -8,7 +8,7 @@ class ScaledTwoWaySprite : public Drawable {
 public:
     ScaledTwoWaySprite(const std::string&);
     ScaledTwoWaySprite(const ScaledTwoWaySprite&);
-    virtual ~ScaledTwoWaySprite() { }
+    virtual ~ScaledTwoWaySprite(); 
 
     bool operator<(const ScaledTwoWaySprite& rhs) const {
         return scale < rhs.scale;
@@ -26,6 +26,7 @@ public:
 
 protected:
     float minScale;
+    float maxScale;
     float scale;
 
     std::vector<Frame *> frames;

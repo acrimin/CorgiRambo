@@ -12,14 +12,14 @@
 <username>acrimin</username>
 
 <view>
-  <width>1040</width>
-  <height>585</height>
+  <width>1500</width>
+  <height>620</height>
 </view>
 
 <world>
-  <width>5000</width>
+  <width>10000</width>
   <height>1000</height>
-  <gravity>880</gravity>
+  <gravity>900</gravity>
 </world>
 
 <back>
@@ -60,18 +60,22 @@
 
 <corgi>
   <file>images/corgis.bmp</file>
-  <health>200</health>
+  <health>300</health>
   <frames>12</frames>
   <chunk><size>64</size></chunk>
   <chunk><distance>100</distance></chunk>
+  <laying><file>images/corgisDown.bmp</file></laying>
+  <laying><frames>2</frames></laying>
   <AK47><file>images/corgisAK.bmp</file></AK47>
   <AK47><frames>12</frames></AK47>
+  <AK47><displacement x="143" y="46"/></AK47>
   <Bazooka><file>images/corgisBazooka.bmp</file></Bazooka>
   <Bazooka><frames>12</frames></Bazooka>
+  <Bazooka><displacement x="143" y="46"/></Bazooka>
   <startLoc x="120" y="820"/>
   <frameInterval>100</frameInterval>
   <speedX>200</speedX>
-  <speedY>-350</speedY>
+  <speedY>-380</speedY>
   <traction>580</traction>
   <transparency>true</transparency>
 </corgi>
@@ -82,9 +86,21 @@
   <frames>4</frames>
   <chunk><size>64</size></chunk>
   <chunk><distance>100</distance></chunk>
-  <startLoc x="2000" y="800"/>
-  <speedX>-75</speedX>
+  <startLoc x="1000" y="800"/>
+  <gun>Bazooka</gun>
+  <displacement x="400" y="60"/>
+
+  <speedX>1</speedX>
   <speedY>0</speedY>
+  <attackDistance>500</attackDistance>
+  <attackSpeed>225</attackSpeed>
+  <ramDistance>300</ramDistance>
+  <ramSpeed>350</ramSpeed>
+  <fleeHealth>300</fleeHealth>
+  <fleeSpeed>350</fleeSpeed>
+  <chillDistance>1000</chillDistance>
+  <sound>5</sound>
+
   <frameInterval>80</frameInterval>
   <transparency>true</transparency>
 </tank>
@@ -94,46 +110,44 @@
   <frames>16</frames>
   <frameInterval>80</frameInterval>
   <speed>300</speed>
-  <scale>.25</scale>
+  <scale min=".25" max=".8"/>
   <count>20</count>
   <transparency>true</transparency>
 </birds>
 
 <AK47>
-    <file>images/AK47.bmp</file>
-    <startLoc x="120" y="820"/>
-    <displacement x="143" y="46"/>
     <damage>10</damage>
     <distance>500</distance>
-    <speed>500</speed>
+    <speed>1000</speed>
     <fireRate>75</fireRate>
     <reloadTime>10</reloadTime>
     <clipSize>50</clipSize>
-    <transparency>true</transparency>
+    <sound>1</sound>
 </AK47>
 
 <AK47Bullet>
     <file>images/bulletAK.bmp</file>
+    <explodes>false</explodes>
     <frames>2</frames>
     <transparency>true</transparency>
 </AK47Bullet>
 
  <Bazooka>
-    <file>images/bazooka.bmp</file>
     <damage>250</damage>
-    <startLoc x="120" y="820"/>
-    <displacement x="143" y="46"/>
     <distance>500</distance>
-    <speed>500</speed>
+    <speed>700</speed>
     <fireRate>1000</fireRate>
     <reloadTime>10</reloadTime>
     <clipSize>50</clipSize>
-    <transparency>true</transparency>
+    <sound>6</sound>
 </Bazooka>
 
 <BazookaBullet>
     <file>images/bulletBazooka.bmp</file>
+    <explosion><file>images/explosion.bmp</file></explosion>
+    <explodes>true</explodes>
     <frames>2</frames>
+    <explosion><transparency>true</transparency></explosion>
     <transparency>true</transparency>
 </BazookaBullet>
     

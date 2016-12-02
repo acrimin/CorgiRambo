@@ -17,12 +17,13 @@ public:
     virtual void draw() const;
     virtual void update(Uint32 ticks);
     virtual const Frame* getFrame() const {
-        return frames[currentFrame];
+        return frames[currentFrame+face];
     }
     bool collidedWith(Drawable*);
     bool hurt(int);
     void right(bool);
     void left(bool);
+    void down(bool);
     void shift(bool);
     void shoot(bool);
     void changeGun();
@@ -47,6 +48,7 @@ protected:
     void advanceFrame(Uint32 ticks);
 
     int ground;
+    bool laying;
 
     int maxXSpeed;
     int maxYSpeed;
@@ -66,8 +68,10 @@ protected:
     int currentGun;
     bool shooting;
     int health;
-    bool godMode;
+    int maxHealth;
     HealthBar healthBar;
+    unsigned healthEndTime;
+    bool godMode;
 };
 
 #endif
